@@ -1,0 +1,72 @@
+﻿[INFO] Scanning for projects...
+[INFO] 
+[INFO] --------------< com.hospital:hospital-management-system >---------------
+[INFO] Building hospital-management-system 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.3.2:clean (default-clean) @ hospital-management-system ---
+[INFO] Deleting C:\Users\SANDEEP\Downloads\Hospital-Management-System-master\Hospital-Management-System-master\target
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ hospital-management-system ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ hospital-management-system ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 14 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[39,20] cannot find symbol
+  symbol:   method setPatient(com.hospital.model.Patient)
+  location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[40,20] cannot find symbol
+  symbol:   method setDoctor(com.hospital.model.Doctor)
+  location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[41,20] cannot find symbol
+  symbol:   method setAppointmentDate(java.time.LocalDate)
+  location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,74] cannot find symbol
+  symbol:   method getPatientId()
+  location: variable request of type com.hospital.controller.AppointmentRequest
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,98] cannot find symbol
+  symbol:   method getDoctorId()
+  location: variable request of type com.hospital.controller.AppointmentRequest
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,137] cannot find symbol
+  symbol:   method getDate()
+  location: variable request of type com.hospital.controller.AppointmentRequest
+[INFO] 6 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.582 s
+[INFO] Finished at: 2026-03-24T23:27:40+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project hospital-management-system: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[39,20] cannot find symbol
+[ERROR]   symbol:   method setPatient(com.hospital.model.Patient)
+[ERROR]   location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[40,20] cannot find symbol
+[ERROR]   symbol:   method setDoctor(com.hospital.model.Doctor)
+[ERROR]   location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/service/AppointmentService.java:[41,20] cannot find symbol
+[ERROR]   symbol:   method setAppointmentDate(java.time.LocalDate)
+[ERROR]   location: variable appointment of type com.hospital.model.Appointment
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,74] cannot find symbol
+[ERROR]   symbol:   method getPatientId()
+[ERROR]   location: variable request of type com.hospital.controller.AppointmentRequest
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,98] cannot find symbol
+[ERROR]   symbol:   method getDoctorId()
+[ERROR]   location: variable request of type com.hospital.controller.AppointmentRequest
+[ERROR] /C:/Users/SANDEEP/Downloads/Hospital-Management-System-master/Hospital-Management-System-master/src/main/java/com/hospital/controller/AppointmentController.java:[29,137] cannot find symbol
+[ERROR]   symbol:   method getDate()
+[ERROR]   location: variable request of type com.hospital.controller.AppointmentRequest
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

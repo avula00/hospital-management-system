@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container glass">
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-square-h"></i> <span>HMS Portal</span>
+            </div>
+            <nav>
+                <button class="nav-btn active" data-target="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+                <button class="nav-btn" data-target="patients"><i class="fa-solid fa-bed-pulse"></i> Patients</button>
+                <button class="nav-btn" data-target="doctors"><i class="fa-solid fa-user-doctor"></i> Doctors</button>
+                <button class="nav-btn" data-target="appointments"><i class="fa-solid fa-calendar-check"></i> Appointments</button>
+            </nav>
+        </aside>
+
+        <main class="content">
+            <!-- Dashboard View -->
+            <section id="dashboard" class="view active">
+                <header>
+                    <h1>Overview</h1>
+                    <p>Welcome back to the Virtual Hospital Management Dashboard</p>
+                </header>
+                <div class="stats-grid">
+                    <div class="stat-card glass-inner">
+                        <i class="fa-solid fa-users"></i>
+                        <div class="stat-info">
+                            <h3>Total Patients</h3>
+                            <h2 id="dash-patient-cnt">0</h2>
+                        </div>
+                    </div>
+                    <div class="stat-card glass-inner">
+                        <i class="fa-solid fa-stethoscope"></i>
+                        <div class="stat-info">
+                            <h3>Total Doctors</h3>
+                            <h2 id="dash-doctor-cnt">0</h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Patients View -->
+            <section id="patients" class="view">
+                <header>
+                    <h1>Patients Directory</h1>
+                    <button class="btn-primary" onclick="showModal('addPatientModal')"><i class="fa-solid fa-plus"></i> New Patient</button>
+                </header>
+                <div class="table-container glass-inner">
+                    <table id="patientsTable">
+                        <thead>
+                            <tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Doctors View -->
+            <section id="doctors" class="view">
+                <header>
+                    <h1>Medical Staff</h1>
+                </header>
+                <div class="table-container glass-inner">
+                    <table id="doctorsTable">
+                        <thead>
+                            <tr><th>ID</th><th>Name</th><th>Specialization</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Appointments View -->
+            <section id="appointments" class="view">
+                <header>
+                    <h1>Appointments</h1>
+                    <button class="btn-primary" onclick="showModal('bookAppointmentModal')"><i class="fa-solid fa-calendar-plus"></i> Book</button>
+                </header>
+                <div class="table-container glass-inner" id="appointmentsContainer">
+                    <table id="appointmentsTable">
+                        <thead>
+                            <tr><th>ID</th><th>Patient Name</th><th>Doctor Name</th><th>Date</th></tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="glass-inner empty-state" id="appointmentsEmpty" style="display:none">
+                    <i class="fa-regular fa-calendar-xmark"></i>
+                    <p>No appointments booked yet.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="addPatientModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-btn" onclick="closeModal('addPatientModal')">&times;</span>
+            <h2>Add New Patient</h2>
+            <form id="addPatientForm">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" required placeholder="John Doe">
+                </div>
+                <div class="input-group">
+                    <label>Age</label>
+                    <input type="number" name="age" required min="0" max="150" placeholder="25">
+                </div>
+                <div class="input-group">
+                    <label>Gender</label>
+                    <select name="gender" required>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-submit">Save Record</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="bookAppointmentModal" class="modal">
+        <div class="modal-content glass">
+            <span class="close-btn" onclick="closeModal('bookAppointmentModal')">&times;</span>
+            <h2>Schedule Booking</h2>
+            <form id="bookAppointmentForm">
+                <div class="input-group">
+                    <label>Patient ID (Check directory)</label>
+                    <input type="number" name="patientId" required placeholder="1">
+                </div>
+                <div class="input-group">
+                    <label>Doctor ID (Check directory)</label>
+                    <input type="number" name="doctorId" required placeholder="1">
+                </div>
+                <div class="input-group">
+                    <label>Date</label>
+                    <input type="date" name="date" required>
+                </div>
+                <button type="submit" class="btn-submit">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

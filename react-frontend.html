@@ -1,0 +1,286 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MedCare React Dashboard</title>
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX Compilation locally -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- FontAwesome for standard Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+        :root { --bg-color: #0f172a; --text-primary: #f8fafc; --text-muted: #94a3b8; --accent: #3b82f6; --accent-hover: #2563eb; --glass-bg: rgba(30, 41, 59, 0.7); --glass-border: rgba(255, 255, 255, 0.1); --error: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg-color); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; }
+        input, select, button { font-family: 'Outfit', sans-serif; }
+        body::before, body::after { content: ''; position: fixed; border-radius: 50%; filter: blur(100px); z-index: -1; animation: drift 20s infinite alternate; }
+        body::before { top: -10%; left: -10%; width: 500px; height: 500px; background: rgba(59, 130, 246, 0.15); }
+        body::after { bottom: -10%; right: -10%; width: 600px; height: 600px; background: rgba(168, 85, 247, 0.15); animation-delay: -10s; }
+        @keyframes drift { 0% { transform: translate(0,0); } 100% { transform: translate(100px, 50px); } }
+        .container { display: flex; height: 100vh; width: 100%; border-radius: 20px; overflow: hidden; }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); }
+        .glass-inner { background: rgba(15, 23, 42, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 24px; }
+        .sidebar { width: 280px; padding: 24px; display: flex; flex-direction: column; gap: 40px; border-right: 1px solid var(--glass-border); z-index: 10; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .nav-links { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .nav-btn { width: 100%; padding: 14px 20px; border: none; background: transparent; color: var(--text-muted); text-align: left; border-radius: 12px; font-size: 16px; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.05); color: var(--text-primary); }
+        .nav-btn.active { background: rgba(59, 130, 246, 0.15); color: var(--accent); border-left: 4px solid var(--accent); border-radius: 4px 12px 12px 4px; }
+        .content { flex: 1; padding: 40px 60px; overflow-y: auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        h1 { font-size: 32px; font-weight: 600; letter-spacing: -1px; }
+        .btn-primary { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 500; font-size: 15px; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-primary:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px; }
+        .stat-card { display: flex; align-items: center; gap: 20px; transition: 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.15); }
+        .stat-icon { width: 60px; height: 60px; border-radius: 16px; background: rgba(59,130,246,0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .stat-info h3 { font-size: 14px; font-weight: 500; color: var(--text-muted); margin-bottom: 4px; }
+        .stat-info h2 { font-size: 36px; font-weight: 700; line-height: 1; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { padding: 16px; border-bottom: 1px solid var(--glass-border); color: var(--text-muted); font-weight: 500; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        tbody tr:hover { background: rgba(255,255,255,0.02); }
+        .modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; z-index: 100; transition: 0.3s; backdrop-filter: blur(8px); }
+        .modal-content { width: 100%; max-width: 450px; padding: 32px; border-radius: 20px; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .close-btn { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; transition: 0.2s; }
+        .close-btn:hover { color: white; transform: rotate(90deg); }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; font-size: 14px; margin-bottom: 8px; color: var(--text-muted); }
+        .input-group input, .input-group select { width: 100%; padding: 12px 16px; border-radius: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; transition: 0.3s; }
+        .input-group input:focus, .input-group select:focus { outline: none; border-color: var(--accent); background: rgba(0,0,0,0.4); }
+        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [patients, setPatients] = useState([]);
+            const [doctors, setDoctors] = useState([]);
+            const [appointments, setAppointments] = useState([]);
+            
+            const [showPatientModal, setShowPatientModal] = useState(false);
+            const [showAppointmentModal, setShowAppointmentModal] = useState(false);
+            
+            const [patientForm, setPatientForm] = useState({ name: '', age: '', gender: '' });
+            const [appointmentForm, setAppointmentForm] = useState({ patientId: '', doctorId: '', date: '' });
+
+            const fetchAllData = async () => {
+                try {
+                    const pRes = await fetch('http://localhost:8080/api/patients');
+                    if(pRes.ok) setPatients(await pRes.json());
+                    
+                    const dRes = await fetch('http://localhost:8080/api/doctors');
+                    if(dRes.ok) setDoctors(await dRes.json());
+                    
+                    const aRes = await fetch('http://localhost:8080/api/appointments');
+                    if(aRes.ok) setAppointments(await aRes.json());
+                } catch (e) { console.error("API Error", e); }
+            };
+
+            useEffect(() => { fetchAllData(); }, []);
+
+            const addPatient = async (e) => {
+                e.preventDefault();
+                try {
+                    const res = await fetch('http://localhost:8080/api/patients', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(patientForm)
+                    });
+                    if (res.ok) {
+                        setShowPatientModal(false);
+                        setPatientForm({ name: '', age: '', gender: '' });
+                        fetchAllData();
+                    }
+                } catch (e) { alert("Error adding patient"); }
+            };
+
+            const deletePatient = async (id) => {
+                if (!confirm("Are you sure you want to delete this patient (and all existing appointments)?")) return;
+                try {
+                    const res = await fetch(`http://localhost:8080/api/patients/${id}`, { method: 'DELETE' });
+                    if (res.ok) fetchAllData();
+                } catch (e) { alert("Error deleting patient"); }
+            };
+
+            const bookAppointment = async (e) => {
+                e.preventDefault();
+                try {
+                    const res = await fetch('http://localhost:8080/api/appointments', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(appointmentForm)
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        alert("Appointment booked!");
+                        setShowAppointmentModal(false);
+                        setAppointmentForm({ patientId: '', doctorId: '', date: '' });
+                        fetchAllData();
+                    } else {
+                        alert("Booking failed: " + data.error);
+                    }
+                } catch (e) { alert("Error booking appointment"); }
+            };
+
+            return (
+                <div className="container">
+                  <nav className="sidebar glass">
+                    <div className="logo">
+                      <i className="fa-solid fa-notes-medical" style={{fontSize: '32px', color: 'var(--accent)'}}></i>
+                      <h2>MedCare</h2>
+                    </div>
+                    <ul className="nav-links">
+                      <li><button className={`nav-btn ${activeTab === 'dashboard' ? 'active' : ''}`} onClick={() => setActiveTab('dashboard')}><i className="fa-solid fa-chart-pie"></i> Dashboard</button></li>
+                      <li><button className={`nav-btn ${activeTab === 'patients' ? 'active' : ''}`} onClick={() => setActiveTab('patients')}><i className="fa-solid fa-bed-pulse"></i> Patients</button></li>
+                      <li><button className={`nav-btn ${activeTab === 'doctors' ? 'active' : ''}`} onClick={() => setActiveTab('doctors')}><i className="fa-solid fa-user-doctor"></i> Doctors</button></li>
+                      <li><button className={`nav-btn ${activeTab === 'appointments' ? 'active' : ''}`} onClick={() => setActiveTab('appointments')}><i className="fa-solid fa-calendar-check"></i> Appointments</button></li>
+                    </ul>
+                  </nav>
+
+                  <main className="content">
+                    {activeTab === 'dashboard' && (
+                      <section className="view active">
+                        <header><h1>Overview</h1></header>
+                        <div className="stats-grid">
+                          <div className="stat-card glass-inner">
+                            <div className="stat-icon"><i className="fa-solid fa-users"></i></div>
+                            <div className="stat-info"><h3>Total Patients</h3><h2>{patients.length}</h2></div>
+                          </div>
+                          <div className="stat-card glass-inner">
+                            <div className="stat-icon" style={{color: '#a855f7', background: 'rgba(168, 85, 247, 0.1)'}}><i className="fa-solid fa-user-doctor"></i></div>
+                            <div className="stat-info"><h3>Specialists</h3><h2>{doctors.length}</h2></div>
+                          </div>
+                        </div>
+                      </section>
+                    )}
+
+                    {activeTab === 'patients' && (
+                      <section className="view active">
+                        <header>
+                          <h1>Patients</h1>
+                          <button className="btn-primary" onClick={() => setShowPatientModal(true)}>
+                            <i className="fa-solid fa-user-plus"></i> Add Patient
+                          </button>
+                        </header>
+                        <div className="table-container glass-inner">
+                          <table>
+                            <thead><tr><th>ID</th><th>Name</th><th>Age</th><th>Gender</th><th>Actions</th></tr></thead>
+                            <tbody>
+                              {patients.map(p => (
+                                <tr key={p.id}>
+                                  <td><span style={{color: 'var(--text-muted)'}}>#{p.id}</span></td>
+                                  <td style={{fontWeight: 500}}>{p.name}</td>
+                                  <td>{p.age}</td>
+                                  <td><span style={{background: 'rgba(255,255,255,0.1)', padding: '5px 10px', borderRadius: '6px', fontSize: '12px'}}>{p.gender}</span></td>
+                                  <td><button onClick={() => deletePatient(p.id)} style={{background: 'none', border: 'none', color: 'var(--error)', cursor: 'pointer', fontSize: '16px'}}><i className="fa-solid fa-trash"></i></button></td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          {patients.length === 0 && <div className="empty-state"><p>No patients found.</p></div>}
+                        </div>
+                      </section>
+                    )}
+
+                    {activeTab === 'doctors' && (
+                      <section className="view active">
+                        <header><h1>Doctors Directory</h1></header>
+                        <div className="table-container glass-inner">
+                          <table>
+                            <thead><tr><th>ID</th><th>Name</th><th>Specialization</th></tr></thead>
+                            <tbody>
+                              {doctors.map(d => (
+                                 <tr key={d.id}>
+                                   <td><span style={{color: 'var(--text-muted)'}}>#{d.id}</span></td>
+                                   <td style={{fontWeight: 500}}>{d.name}</td>
+                                   <td style={{color: 'var(--accent)'}}>{d.specialization}</td>
+                                 </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </section>
+                    )}
+
+                    {activeTab === 'appointments' && (
+                      <section className="view active">
+                        <header>
+                          <h1>Appointments</h1>
+                          <button className="btn-primary" onClick={() => setShowAppointmentModal(true)}>
+                            <i className="fa-solid fa-calendar-plus"></i> Book
+                          </button>
+                        </header>
+                        <div className="table-container glass-inner">
+                          <table>
+                            <thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th></tr></thead>
+                            <tbody>
+                              {appointments.map(a => (
+                                 <tr key={a.id}>
+                                   <td><span style={{color: 'var(--text-muted)'}}>#{a.id}</span></td>
+                                   <td style={{fontWeight: 500}}>{a.patient.name}</td>
+                                   <td style={{color: 'var(--accent)'}}>Dr. {a.doctor.name}</td>
+                                   <td>{a.appointmentDate}</td>
+                                 </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          {appointments.length === 0 && <div className="empty-state"><p>No appointments booked yet.</p></div>}
+                        </div>
+                      </section>
+                    )}
+                  </main>
+
+                  {/* Modals */}
+                  {showPatientModal && (
+                    <div className="modal show">
+                      <div className="modal-content glass">
+                        <div className="modal-header"><h2>Register Patient</h2><button className="close-btn" onClick={() => setShowPatientModal(false)}><i className="fa-solid fa-xmark"></i></button></div>
+                        <form onSubmit={addPatient}>
+                          <div className="input-group"><label>Full Name</label><input type="text" required value={patientForm.name} onChange={e => setPatientForm({...patientForm, name: e.target.value})} /></div>
+                          <div className="input-group"><label>Age</label><input type="number" required value={patientForm.age} onChange={e => setPatientForm({...patientForm, age: e.target.value})} /></div>
+                          <div className="input-group">
+                            <label>Gender</label>
+                            <select required value={patientForm.gender} onChange={e => setPatientForm({...patientForm, gender: e.target.value})}>
+                              <option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option>
+                            </select>
+                          </div>
+                          <button type="submit" className="btn-primary" style={{width: '100%'}}>Save Patient</button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+
+                  {showAppointmentModal && (
+                    <div className="modal show">
+                      <div className="modal-content glass">
+                        <div className="modal-header"><h2>Book Appointment</h2><button className="close-btn" onClick={() => setShowAppointmentModal(false)}><i className="fa-solid fa-xmark"></i></button></div>
+                        <form onSubmit={bookAppointment}>
+                          <div className="input-group"><label>Patient ID</label><input type="number" required value={appointmentForm.patientId} onChange={e => setAppointmentForm({...appointmentForm, patientId: e.target.value})} /></div>
+                          <div className="input-group"><label>Doctor ID</label><input type="number" required value={appointmentForm.doctorId} onChange={e => setAppointmentForm({...appointmentForm, doctorId: e.target.value})} /></div>
+                          <div className="input-group"><label>Date</label><input type="date" required value={appointmentForm.date} onChange={e => setAppointmentForm({...appointmentForm, date: e.target.value})} /></div>
+                          <button type="submit" className="btn-primary" style={{width: '100%'}}>Confirm Booking</button>
+                        </form>
+                      </div>
+                    </div>
+                  )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
